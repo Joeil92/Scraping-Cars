@@ -43,6 +43,8 @@ export default class Puppeteer {
     public async scrollPage(nbScroll: number) {
         if (!this.page) return;
 
+        this.sendMessage("Chargement des offres");
+
         for (let i = 0; i < nbScroll; i++) {
             await this.page.evaluate(() => {
                 window.scrollBy(0, window.innerHeight);
@@ -59,6 +61,21 @@ export default class Puppeteer {
             await this.page.click(selector);
         } catch (error) {
             throw new Error('Selector not found');
+        }
+    }
+
+    public async clickOnCheckbox(selector: string) {
+        if(!this.page) return;
+
+        try {
+            const checkbox = await this.page.waitForSelector(selector);
+            console.log(checkbox);
+            if(!checkbox) throw new Error('Checkbox not found');
+
+            await checkbox.click();
+        } catch (error) {
+            console.log(error);
+            throw new Error('Checkbox not found');
         }
     }
 
